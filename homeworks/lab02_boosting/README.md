@@ -1,0 +1,1 @@
+* Boosting and model analysis: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/girafe-ai/ml-course/blob/24f_mipt/homeworks/lab02_boosting/lab02_boosting_and_explanation.ipynb)
