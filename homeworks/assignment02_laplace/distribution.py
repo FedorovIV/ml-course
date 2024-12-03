@@ -1,46 +1,57 @@
 import numpy as np
 
-class LaplaceDistribution:    
+import numpy as np
+from scipy.stats import laplace
+
+class LaplaceDistribution:
+    
+    def __init__(self, features: np.ndarray):
+        '''
+        Инициализация параметров распределения Лапласа — медианы и шкалы.
+        
+        Args:
+            features: A numpy array of shape (n_objects, n_features). Every column represents all available values for the selected feature.
+        '''
+        self.loc = np.median(features, axis=0)
+        self.scale = self.mean_abs_deviation_from_median(features)
+
     @staticmethod
     def mean_abs_deviation_from_median(x: np.ndarray):
         '''
+        Вычисляет среднее абсолютное отклонение от медианы для каждого признака.
+        
         Args:
         - x: A numpy array of shape (n_objects, n_features) containing the data
           consisting of num_train samples each of dimension D.
+        
+        Returns:
+        - mad: A numpy array of shape (n_features,) with the MAD for each feature.
         '''
-        ####
-        # Do not change the class outside of this block
-        # Your code here
-        ####
-
-    def __init__(self, features):
-        '''
-        Args:
-            feature: A numpy array of shape (n_objects, n_features). Every column represents all available values for the selected feature.
-        '''
-        ####
-        # Do not change the class outside of this block
-        self.loc = # YOUR CODE HERE
-        self.scale = # YOUR CODE HERE
-        ####
-
+        medians = np.median(x, axis=0)
+        mad = np.mean(np.abs(x - medians), axis=0)
+        return mad
 
     def logpdf(self, values):
         '''
-        Returns logarithm of probability density at every input value.
+        Возвращает логарифм плотности вероятности для каждого входного значения.
+        
         Args:
             values: A numpy array of shape (n_objects, n_features). Every column represents all available values for the selected feature.
-        '''
-        ####
-        # Do not change the class outside of this block
-        return 
-        ####
         
+        Returns:
+        - log_prob: A numpy array of shape (n_objects, n_features) with the log probability densities.
+        '''
+        log_prob = -np.log(2 * self.scale) - np.abs(values - self.loc) / self.scale
+        return log_prob
     
     def pdf(self, values):
         '''
-        Returns probability density at every input value.
+        Возвращает плотность вероятности для каждого входного значения.
+        
         Args:
             values: A numpy array of shape (n_objects, n_features). Every column represents all available values for the selected feature.
+        
+        Returns:
+        - prob: A numpy array of shape (n_objects, n_features) with the probability densities.
         '''
-        return np.exp(self.logpdf(value))
+        return np.exp(self.logpdf(values))
